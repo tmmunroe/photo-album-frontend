@@ -1,28 +1,55 @@
 <script setup lang="ts">
-import { ApiClient } from '../services/PhotoAlbumService'
+import { computed, ref, watch, type Ref } from "vue"
+import { ApiClient, type PhotoInfo  } from '../services/PhotoAlbumService'
 
 defineProps<{
   msg: string
 }>()
 
 const apiClient = new ApiClient()
+const query = ref('')
+const queryResultMessage = ref('')
+const photos: Ref<Array<PhotoInfo> | null> = ref(null)
 
-function searchForPhotos(q: string) {
-  apiClient.searchPhotos(q)
+async function searchForPhotos() {
+  queryResultMessage.value = ''
+  console.log(`Searching for ${query.value}...`)
+  photos.value = await apiClient.searchPhotos(query.value)
+  console.log(`Received ${photos.value.length} photos!`)
 }
+
+watch(photos, (newPhotos, oldPhotos) => {
+  if (newPhotos === null) {
+    queryResultMessage.value = ''
+  } else {
+    queryResultMessage.value = newPhotos.length > 0 ? `Found ${newPhotos.length} photos` : 'No photos found'
+  }
+})
 
 </script>
 
 <template>
-  <button @click="searchForPhotos('cat')">Search for Photos</button>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>. What's next?
-    </h3>
+  <section>
+    <form @submit.prevent="searchForPhotos">
+      <input type="text" v-model="query" />
+      <button type="submit">Search</button>
+    </form>
+  </section>
+
+  <section>
+    <div>
+      <p>{{ queryResultMessage }}</p>
+    </div>
+  </section>
+
+  <div>
+    <ul>
+      <li v-for="photo in photos" :key="photo.url">
+        {{photo.url}}
+      </li>
+    </ul>
   </div>
+  
 </template>
 
 <style scoped>
