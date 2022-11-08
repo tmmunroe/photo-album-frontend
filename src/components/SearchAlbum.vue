@@ -2,9 +2,9 @@
 import { computed, ref, watch, type Ref } from "vue"
 import { ApiClient, type PhotoInfo  } from '../services/PhotoAlbumService'
 
-defineProps<{
-  msg: string
-}>()
+// defineProps<{
+//   msg: string
+// }>()
 
 const apiClient = new ApiClient()
 const query = ref('')

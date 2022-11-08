@@ -1,7 +1,11 @@
+<script setup lang="ts">
+import SearchAlbum from "../components/SearchAlbum.vue"
+</script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <main>
+    <SearchAlbum />
+  </main>
 </template>
 
 <style>

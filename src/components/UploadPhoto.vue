@@ -1,27 +1,80 @@
 <script setup lang="ts">
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
-// import { ApiClient } from '../services/PhotoAlbumService'
+// import WelcomeItem from './WelcomeItem.vue'
+// import DocumentationIcon from './icons/IconDocumentation.vue'
+// import SupportIcon from './icons/IconSupport.vue'
+import { ref, reactive, type Ref } from "vue"
+import { ApiClient, type PhotoInfo  } from '../services/PhotoAlbumService'
 
 // defineProps<{
 //   msg: string
 // }>()
 
-// const apiClient = new ApiClient()
+const apiClient = new ApiClient()
+const filePath = ref("")
+const customLabels = ref(Array<string>())
+const preview = ref("")
 
-// function uploadPhoto(base64String: string, customLabels: string[]) {
-//   apiClient.uploadPhoto(base64String, customLabels)
-// }
+
+function uploadPhoto() {
+  var base64String:string = ""
+  apiClient.uploadPhoto(base64String, customLabels.value)
+}
+
+
+function showPreview(e:Event) {
+  console.log("showPreview called with ", e)
+
+  const htmlTarget = e.target as HTMLInputElement
+  if (htmlTarget === null) {
+    console.log('html target was null')
+    return
+  }
+  
+  const files = htmlTarget.files
+  if (files === null) {
+    console.log('html target had no files')
+    return
+  }
+
+  const file = files[0]
+
+  const reader = new FileReader()
+  reader.onload = (e: ProgressEvent<FileReader>) => {
+    if (e.target === null) {
+      console.log("file reader failed to read file")
+      return
+    }
+
+    if (e.target.result === null || e.target.result instanceof ArrayBuffer) {
+      console.log("file reader result was null or an array buffer")
+      return
+    }
+    
+    preview.value = e.target.result 
+  }
+
+  reader.readAsDataURL(file)
+}
 
 </script>
 
 
 <template>
-  <WelcomeItem>
+  <form @submit.prevent="uploadPhoto">
+    
+    <input @change="showPreview" id="fileInput" type="file" accept="image/*" multiple />
+    <output img :src="preview"></output>
+
+    <p><textarea v-model="customLabels" placeholder="custom labels (e.g. cat,dog)" /></p>
+
+    <p>
+    <button type="submit">Upload</button>
+    </p>
+  </form>
+
+  <p> Custom labels {{customLabels}} </p>
+
+  <!-- <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
     </template>
@@ -34,60 +87,6 @@ import SupportIcon from './icons/IconSupport.vue'
 
   <WelcomeItem>
     <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
-
-    This project is served and bundled with
-    <a href="https://vitejs.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a> +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank" rel="noopener">Volar</a>. If
-    you need to test your components and web pages, check out
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> and
-    <a href="https://on.cypress.io/component" target="_blank">Cypress Component Testing</a>.
-
-    <br />
-
-    More instructions are available in <code>README.md</code>.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
-
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
-    <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>, our official
-    Discord server, or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
-    <a href="https://news.vuejs.org" target="_blank" rel="noopener">our mailing list</a> and follow
-    the official
-    <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    twitter account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
       <SupportIcon />
     </template>
     <template #heading>Support Vue</template>
@@ -95,5 +94,5 @@ import SupportIcon from './icons/IconSupport.vue'
     As an independent project, Vue relies on community backing for its sustainability. You can help
     us by
     <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem>
+  </WelcomeItem> -->
 </template>
