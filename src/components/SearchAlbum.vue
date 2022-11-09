@@ -1,20 +1,26 @@
 <script setup lang="ts">
 import { computed, ref, watch, type Ref } from "vue"
-import { ApiClient, type PhotoInfo  } from '../services/PhotoAlbumService'
+import { ApiClient } from '../services/PhotoAlbumService'
+import Photo from "./Photo.vue"
 
 // defineProps<{
 //   msg: string
 // }>()
 
+
 const apiClient = new ApiClient()
 const query = ref('')
 const queryResultMessage = ref('')
-const photos: Ref<Array<PhotoInfo> | null> = ref(null)
+const photos: Ref<string[] | null> = ref(null)
+
 
 async function searchForPhotos() {
+  const base64Prefix = "data:image/jpeg;base64,"
   queryResultMessage.value = ''
+  photos.value = null
   console.log(`Searching for ${query.value}...`)
-  photos.value = await apiClient.searchPhotos(query.value)
+  const photosRaw = await apiClient.searchPhotos(query.value)
+  photos.value = photosRaw.map((s) => { return base64Prefix.concat(s) })
   console.log(`Received ${photos.value.length} photos!`)
 }
 
@@ -42,14 +48,28 @@ watch(photos, (newPhotos, oldPhotos) => {
     </div>
   </section>
 
-  <div>
+  <!-- <div>
     <ul>
       <li v-for="photo in photos" :key="photo.url">
-        {{photo.url}}
+        <Photo :url="photo.url" />
       </li>
     </ul>
-  </div>
+  </div> -->
   
+  <div>
+    <ul>
+      <div v-for="photo in photos">
+        <Photo :src="photo" />
+      </div>
+    </ul>
+  </div>
+
+  <div>
+    <Photo 
+      v-for="photo in photos"
+      :src="photo"
+    />
+  </div>
 </template>
 
 <style scoped>

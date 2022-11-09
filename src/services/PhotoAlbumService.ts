@@ -2,11 +2,6 @@ import '../assets/sdk/apigClient.js'
 
 // import { apigClientFactory } from './assets/js/sdk/apigClient.js'
 
-export interface PhotoInfo {
-    url: string
-    labels: string[]
-}
-
 export class ApiClient {
     apigClient: any
     constructor() {
@@ -41,14 +36,14 @@ export class ApiClient {
     }
 
     
-    async searchPhotos(query: string): Promise<PhotoInfo[]> {
-        var results: PhotoInfo[] = []
+    async searchPhotos(query: string): Promise<string[]> {
+        var results: string[] = []
         console.log('searching photos for: ', query);
 
         try {
             const response = await this.apigClient.searchGet({ 'q': query }, {}, {})
             console.log('received response: ', response);
-            response.data.results.forEach((result: PhotoInfo) => {
+            response.data.results.forEach((result: string) => {
                 console.log('Adding result: ', result)
                 results.push(result)
             });

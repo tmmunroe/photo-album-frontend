@@ -3,15 +3,11 @@
 // import DocumentationIcon from './icons/IconDocumentation.vue'
 // import SupportIcon from './icons/IconSupport.vue'
 import { ref, reactive, type Ref } from "vue"
-import { ApiClient, type PhotoInfo  } from '../services/PhotoAlbumService'
+import { ApiClient } from '../services/PhotoAlbumService'
 
-// defineProps<{
-//   msg: string
-// }>()
 
 const apiClient = new ApiClient()
 const base64ImageMatcher = RegExp("^data:(image/[^;]*)[^,]*,")
-// const base64PrefixSearcher = RegExp("^data:[^,]*,")
 const customLabels = ref(Array<string>())
 const base64String = ref("")
 const preview = ref(new Image)
