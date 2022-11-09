@@ -12,8 +12,11 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+import { parseTemplate } from 'url-template';
+import { apiGatewayClientFactory } from "./lib/apiGatewayCore/apiGatewayClient.js"
+import { utils } from "./lib/apiGatewayCore/utils.js"
 
-var apigClientFactory = {};
+export var apigClientFactory = {};
 apigClientFactory.newClient = function (config) {
     var apigClient = { };
     if(config === undefined) {
@@ -79,20 +82,20 @@ apigClientFactory.newClient = function (config) {
         defaultAcceptType: config.defaultAcceptType
     };
 
-    var apiGatewayClient = apiGateway.core.apiGatewayClientFactory.newClient(simpleHttpClientConfig, sigV4ClientConfig);
+    var apiGatewayClient = apiGatewayClientFactory.newClient(simpleHttpClientConfig, sigV4ClientConfig);
     
     
     
     apigClient.rootOptions = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        utils.assertParametersDefined(params, [], ['body']);
         
         var rootOptionsRequest = {
             verb: 'options'.toUpperCase(),
-            path: pathComponent + uritemplate('/').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            path: pathComponent + parseTemplate('/').expand(utils.parseParametersToObject(params, [])),
+            headers: utils.parseParametersToObject(params, []),
+            queryParams: utils.parseParametersToObject(params, []),
             body: body
         };
         
@@ -104,13 +107,13 @@ apigClientFactory.newClient = function (config) {
     apigClient.photosPut = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, ['object-key', 'Content-Type', 'x-amz-meta-customLabels'], ['body']);
+        utils.assertParametersDefined(params, ['object-key', 'Content-Type', 'x-amz-meta-customLabels'], ['body']);
         
         var photosPutRequest = {
             verb: 'put'.toUpperCase(),
-            path: pathComponent + uritemplate('/photos').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, ['object-key', 'Content-Type', 'x-amz-meta-customLabels']),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            path: pathComponent + parseTemplate('/photos').expand(utils.parseParametersToObject(params, [])),
+            headers: utils.parseParametersToObject(params, ['object-key', 'Content-Type', 'x-amz-meta-customLabels']),
+            queryParams: utils.parseParametersToObject(params, []),
             body: body
         };
         
@@ -122,13 +125,13 @@ apigClientFactory.newClient = function (config) {
     apigClient.photosOptions = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        utils.assertParametersDefined(params, [], ['body']);
         
         var photosOptionsRequest = {
             verb: 'options'.toUpperCase(),
-            path: pathComponent + uritemplate('/photos').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            path: pathComponent + parseTemplate('/photos').expand(utils.parseParametersToObject(params, [])),
+            headers: utils.parseParametersToObject(params, []),
+            queryParams: utils.parseParametersToObject(params, []),
             body: body
         };
         
@@ -140,13 +143,13 @@ apigClientFactory.newClient = function (config) {
     apigClient.searchGet = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, ['q'], ['body']);
+        utils.assertParametersDefined(params, ['q'], ['body']);
         
         var searchGetRequest = {
             verb: 'get'.toUpperCase(),
-            path: pathComponent + uritemplate('/search').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['q']),
+            path: pathComponent + parseTemplate('/search').expand(utils.parseParametersToObject(params, [])),
+            headers: utils.parseParametersToObject(params, []),
+            queryParams: utils.parseParametersToObject(params, ['q']),
             body: body
         };
         
@@ -158,13 +161,13 @@ apigClientFactory.newClient = function (config) {
     apigClient.searchOptions = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        utils.assertParametersDefined(params, [], ['body']);
         
         var searchOptionsRequest = {
             verb: 'options'.toUpperCase(),
-            path: pathComponent + uritemplate('/search').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            path: pathComponent + parseTemplate('/search').expand(utils.parseParametersToObject(params, [])),
+            headers: utils.parseParametersToObject(params, []),
+            queryParams: utils.parseParametersToObject(params, []),
             body: body
         };
         

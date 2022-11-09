@@ -1,6 +1,5 @@
-import '../assets/sdk/apigClient.js'
 
-// import { apigClientFactory } from './assets/js/sdk/apigClient.js'
+import { apigClientFactory } from "./sdk/apigClient.js";
 
 export class ApiClient {
     apigClient: any

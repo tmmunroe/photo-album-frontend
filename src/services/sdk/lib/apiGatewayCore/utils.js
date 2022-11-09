@@ -12,11 +12,8 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
- 
-var apiGateway = apiGateway || {};
-apiGateway.core = apiGateway.core || {};
 
-apiGateway.core.utils = {
+export var utils = {
     assertDefined: function (object, name) {
         if (object === undefined) {
             throw name + ' must be defined';
@@ -32,8 +29,8 @@ apiGateway.core.utils = {
             params = {};
         }
         for (var i = 0; i < keys.length; i++) {
-            if(!apiGateway.core.utils.contains(ignore, keys[i])) {
-                apiGateway.core.utils.assertDefined(params[keys[i]], keys[i]);
+            if(!utils.contains(ignore, keys[i])) {
+                utils.assertDefined(params[keys[i]], keys[i]);
             }
         }
     },

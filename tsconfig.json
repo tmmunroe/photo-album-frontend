@@ -1,8 +1,9 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "public/sdk"],
   "exclude": ["./dist/**/*"],
   "compilerOptions": {
+    "isolatedModules": true,
     "outDir": "./dist",
     "sourceMap": true,
     "allowJs": true,
