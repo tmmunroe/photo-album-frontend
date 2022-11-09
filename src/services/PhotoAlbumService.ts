@@ -19,28 +19,35 @@ export class ApiClient {
         this.apigClient.rootOptions()
     }
     
-    uploadPhoto(base64String: string, customLabels: string[]) {
-        this.apigClient.photosPut(
-            { 'x-amz-meta-customLabels': customLabels,
-              'Content-Type': 'image/jpg'
-            },
-            { base64String },
-            {}
-         )
-         .then((response: any) => {
-            console.log('received a response: ', response);
-         })
-         .catch((error: any) => {
-            console.log('an error occurred: ', error);
-         })
-    
+
+    async uploadPhoto(base64String: string, contentType:string, customLabels: string[]) {
+        console.log("uploading contentType: ", contentType)
+        console.log("uploading custom labels: ", customLabels)
+        console.log("uploading base64 image: ", base64String)
+
+        const body = { base64String }
+        const headers = { 
+            'x-amz-meta-customLabels': customLabels, 
+            'Content-Type': contentType,
+            'object-key': crypto.randomUUID()
+        }
+
+        try {
+            const response = await this.apigClient.photosPut(headers, body, {})
+            console.log('received response: ', response);
+        } catch(error: any) {
+            console.log("an error occured: ", error)
+        }
     }
+
     
     async searchPhotos(query: string): Promise<PhotoInfo[]> {
         var results: PhotoInfo[] = []
+        console.log('searching photos for: ', query);
 
         try {
             const response = await this.apigClient.searchGet({ 'q': query }, {}, {})
+            console.log('received response: ', response);
             response.data.results.forEach((result: PhotoInfo) => {
                 console.log('Adding result: ', result)
                 results.push(result)

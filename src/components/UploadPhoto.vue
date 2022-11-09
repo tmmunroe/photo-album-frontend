@@ -10,14 +10,25 @@ import { ApiClient, type PhotoInfo  } from '../services/PhotoAlbumService'
 // }>()
 
 const apiClient = new ApiClient()
-const filePath = ref("")
+const base64ImageMatcher = RegExp("^data:(image/[^;]*)[^,]*,")
+// const base64PrefixSearcher = RegExp("^data:[^,]*,")
 const customLabels = ref(Array<string>())
-const preview = ref("")
+const base64String = ref("")
+const preview = ref(new Image)
+const uploadStatus = ref("")
 
 
 function uploadPhoto() {
-  var base64String:string = ""
-  apiClient.uploadPhoto(base64String, customLabels.value)
+  const imageTypeMatches = base64String.value.match(base64ImageMatcher)
+  if (imageTypeMatches === null || imageTypeMatches.length != 2) {
+    console.log("unable to find image type")
+    return
+  }
+
+  const contentType = imageTypeMatches[1]
+  var cleanedBase64String = base64String.value.replace(base64ImageMatcher, "")
+
+  apiClient.uploadPhoto(cleanedBase64String, contentType, customLabels.value)
 }
 
 
@@ -45,12 +56,15 @@ function showPreview(e:Event) {
       return
     }
 
+    console.log("read result: ", e.target.result)
     if (e.target.result === null || e.target.result instanceof ArrayBuffer) {
       console.log("file reader result was null or an array buffer")
       return
     }
     
-    preview.value = e.target.result 
+    base64String.value = e.target.result
+    preview.value = new Image
+    preview.value.src = base64String.value
   }
 
   reader.readAsDataURL(file)
@@ -63,14 +77,19 @@ function showPreview(e:Event) {
   <form @submit.prevent="uploadPhoto">
     
     <input @change="showPreview" id="fileInput" type="file" accept="image/*" multiple />
-    <output img :src="preview"></output>
-
-    <p><textarea v-model="customLabels" placeholder="custom labels (e.g. cat,dog)" /></p>
-
+    <p>
+      <output>
+        <img :src="preview.src">
+      </output>
+    </p>
+    <p>
+      <textarea v-model="customLabels" placeholder="custom labels (e.g. cat,dog)" />
+    </p>
     <p>
     <button type="submit">Upload</button>
     </p>
   </form>
+
 
   <p> Custom labels {{customLabels}} </p>
 
