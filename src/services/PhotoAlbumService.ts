@@ -1,5 +1,5 @@
 
-import { apigClientFactory } from "./sdk/apigClient.js";
+import { apigClientFactory } from "./aws-apigateway/apigClient.js";
 
 
 export class ApiClient {
