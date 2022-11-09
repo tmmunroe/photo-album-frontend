@@ -25,11 +25,11 @@ export class ApiClient {
         console.log("uploading custom labels: ", customLabels)
         console.log("uploading base64 image: ", base64String)
 
-        const body = { base64String }
+        const body = base64String
         const headers = { 
             'x-amz-meta-customLabels': customLabels, 
-            'Content-Type': contentType,
-            'object-key': crypto.randomUUID()
+            'Content-Type': `'${contentType}'`,
+            'object-key': `${crypto.randomUUID()}.jpg`
         }
 
         try {
