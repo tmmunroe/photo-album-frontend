@@ -1,6 +1,6 @@
 
 import { apigClientFactory } from "./aws-apigateway/apigClient.js";
-
+import { v4 as uuidv4 } from "uuid"
 
 export class ApiClient {
     apigClient: any
@@ -19,12 +19,13 @@ export class ApiClient {
         console.log("uploading contentType: ", contentType)
         console.log("uploading custom labels: ", customLabels)
         console.log("uploading base64 image: ", base64String)
-
+        
+        const uuid = uuidv4()
         const body = base64String
         const headers = { 
             'x-amz-meta-customLabels': customLabels, 
             'Content-Type': `'${contentType}'`,
-            'object-key': `${crypto.randomUUID()}.jpg`
+            'object-key': `${uuid}.jpg`
         }
 
         try {
