@@ -56,13 +56,13 @@ watch(photos, (newPhotos, oldPhotos) => {
     </ul>
   </div> -->
   
-  <div>
+  <!-- <div>
     <ul>
       <div v-for="photo in photos">
         <Photo :src="photo" />
       </div>
     </ul>
-  </div>
+  </div> -->
 
   <div>
     <Photo 
