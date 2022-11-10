@@ -1,7 +1,12 @@
 <script setup lang="ts">
-defineProps<{
+import { useImage } from '@vueuse/core'
+
+const props = defineProps<{
   src: string
 }>()
+
+useImage({src: props.src})
+
 </script>
 
 <template>

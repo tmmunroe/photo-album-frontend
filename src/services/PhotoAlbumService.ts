@@ -2,11 +2,12 @@
 import { apigClientFactory } from "./aws-apigateway/apigClient.js";
 import { v4 as uuidv4 } from "uuid"
 
+
 export class ApiClient {
     apigClient: any
     constructor() {
         this.apigClient = apigClientFactory.newClient({
-            'apiKey': 'XCJ9yTtmwz60jAO2pjjdG2wAZfwJAgcx74KQWzpz'
+            'apiKey': '6iIRJlZVhS88FWtwuQQZhWRyD8QaPGS8eI1787e0'
         });
     }
 

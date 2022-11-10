@@ -2,48 +2,27 @@
 // import WelcomeItem from './WelcomeItem.vue'
 // import DocumentationIcon from './icons/IconDocumentation.vue'
 // import SupportIcon from './icons/IconSupport.vue'
-import { ref, reactive, type Ref } from "vue"
+import { ref, reactive, type Ref, watch } from "vue"
 import { ApiClient } from '../services/PhotoAlbumService'
-
+import { useFileDialog, useBase64, useImage } from '@vueuse/core'
 
 const apiClient = new ApiClient()
 const base64ImageMatcher = RegExp("^data:(image/[^;]*)[^,]*,")
 const customLabels = ref(Array<string>())
-const base64String = ref("")
-const preview = ref(new Image)
-const uploadStatus = ref("")
+const base64String: Ref<string | null> = ref('')
+
+const { files, open, reset } = useFileDialog({multiple: false})
 
 
-function uploadPhoto() {
-  const imageTypeMatches = base64String.value.match(base64ImageMatcher)
-  if (imageTypeMatches === null || imageTypeMatches.length != 2) {
-    console.log("unable to find image type")
+// update base64string if file changes
+watch(files, (newFiles) => {
+  if (newFiles === null) {
+    console.log('no new files')
+    base64String.value = null
     return
   }
 
-  const contentType = imageTypeMatches[1]
-  var cleanedBase64String = base64String.value.replace(base64ImageMatcher, "")
-
-  apiClient.uploadPhoto(cleanedBase64String, contentType, customLabels.value)
-}
-
-
-function showPreview(e:Event) {
-  console.log("showPreview called with ", e)
-
-  const htmlTarget = e.target as HTMLInputElement
-  if (htmlTarget === null) {
-    console.log('html target was null')
-    return
-  }
-  
-  const files = htmlTarget.files
-  if (files === null) {
-    console.log('html target had no files')
-    return
-  }
-
-  const file = files[0]
+  const file = newFiles[0]
 
   const reader = new FileReader()
   reader.onload = (e: ProgressEvent<FileReader>) => {
@@ -59,36 +38,62 @@ function showPreview(e:Event) {
     }
     
     base64String.value = e.target.result
-    preview.value = new Image
-    preview.value.src = base64String.value
   }
 
   reader.readAsDataURL(file)
+})
+
+
+// upload photo
+function uploadPhoto() {
+  if (typeof base64String.value != 'string') {
+    console.log("base64String not set")
+    return
+  }
+
+  const imageTypeMatches = base64String.value.match(base64ImageMatcher)
+  if (imageTypeMatches === null || imageTypeMatches.length != 2) {
+    console.log("unable to find image type")
+    return
+  }
+
+  const contentType = imageTypeMatches[1]
+  var cleanedBase64String = base64String.value.replace(base64ImageMatcher, "")
+
+  apiClient.uploadPhoto(cleanedBase64String, contentType, customLabels.value)
 }
+
 
 </script>
 
 
 <template>
-  <form @submit.prevent="uploadPhoto">
-    
-    <input @change="showPreview" id="fileInput" type="file" accept="image/*" multiple />
-    <p>
-      <output>
-        <img :src="preview.src">
-      </output>
-    </p>
-    <p>
+
+  <button type="button" @click="open()">
+    Choose files
+  </button>
+  <button type="button" :disabled="!files" @click="reset()">
+    Reset
+  </button>
+  <template v-if="files">
+    <p>You have selected: <b>{{ files![0].name }} files</b></p>
+    <div v-if="typeof base64String === 'string'">
+      <img :src=base64String class=thumbnail>
+    </div>
+  </template>
+
+  
+  <p>
       <textarea v-model="customLabels" placeholder="custom labels (e.g. cat,dog)" />
-    </p>
-    <p>
-    <button type="submit">Upload</button>
-    </p>
-  </form>
+  </p>
+
+  <p>
+    <button @click="uploadPhoto">Upload</button>
+  </p>
 
 
   <p> Custom labels {{customLabels}} </p>
-
+  <p> Base64String {{base64String}} </p>
   <!-- <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
@@ -111,3 +116,10 @@ function showPreview(e:Event) {
     <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
   </WelcomeItem> -->
 </template>
+
+<style>
+.thumbnail {
+  max-width: 20%;
+  height: auto;
+}
+</style>

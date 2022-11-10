@@ -2,17 +2,20 @@
 import { computed, ref, watch, type Ref } from "vue"
 import { ApiClient } from '../services/PhotoAlbumService'
 import Photo from "./Photo.vue"
+import { useSpeechRecognition } from '@vueuse/core'
 
+// Speech
 // defineProps<{
 //   msg: string
 // }>()
-
 
 const apiClient = new ApiClient()
 const query = ref('')
 const queryResultMessage = ref('')
 const photos: Ref<string[] | null> = ref(null)
 
+const lang = ref('en-US')
+const { isListening, isSupported, stop, start, result } = useSpeechRecognition({lang, continuous: true})
 
 async function searchForPhotos() {
   const base64Prefix = "data:image/jpeg;base64,"
@@ -41,6 +44,19 @@ watch(photos, (newPhotos, oldPhotos) => {
       <button type="submit">Search</button>
     </form>
   </section>
+
+  <button v-if="!isListening" @click="start">
+    Press and talk
+  </button>
+  <button v-if="isListening" class="orange" @click="stop">
+    Stop
+  </button>
+
+<section>
+  <div>
+    <p>{{ result }}</p>
+  </div>
+</section>
 
   <section>
     <div>
