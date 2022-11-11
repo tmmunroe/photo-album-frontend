@@ -10,12 +10,12 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/search',
+      path: '#/search',
       name: 'search',
       component: () => import('../views/SearchView.vue')
     },
     {
-      path: '/upload',
+      path: '#/upload',
       name: 'upload',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
