@@ -31,7 +31,7 @@ export class ApiClient {
 
         try {
             const response = await this.apigClient.photosPut(headers, body, {})
-            console.log('received response: ', response);
+            console.log('received response: ', response)
         } catch(error: any) {
             console.log("an error occured: ", error)
         }

@@ -9,7 +9,7 @@ import { useFileDialog, useBase64, useImage } from '@vueuse/core'
 const apiClient = new ApiClient()
 const base64ImageMatcher = RegExp("^data:(image/[^;]*)[^,]*,")
 const customLabels = ref(Array<string>())
-const base64String: Ref<string | null> = ref('')
+const base64String: Ref<string | null> = ref(null)
 
 const { files, open, reset } = useFileDialog({multiple: false})
 
@@ -78,7 +78,7 @@ function uploadPhoto() {
   <template v-if="files">
     <p>You have selected: <b>{{ files![0].name }} files</b></p>
     <div v-if="typeof base64String === 'string'">
-      <img :src=base64String class=thumbnail>
+      <img :src=base64String class="img-fluid img-thumbnail">
     </div>
   </template>
 
@@ -88,7 +88,7 @@ function uploadPhoto() {
   </p>
 
   <p>
-    <button @click="uploadPhoto">Upload</button>
+    <button @click="uploadPhoto" :disabled="base64String===null">Upload</button>
   </p>
 
 
