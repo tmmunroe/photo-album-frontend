@@ -69,6 +69,7 @@ function uploadPhoto() {
 
 <template>
 
+
   <button type="button" @click="open()">
     Choose files
   </button>
