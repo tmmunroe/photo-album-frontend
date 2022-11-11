@@ -91,9 +91,9 @@ function uploadPhoto() {
     <button @click="uploadPhoto" :disabled="base64String===null">Upload</button>
   </p>
 
-
+<!-- 
   <p> Custom labels {{customLabels}} </p>
-  <p> Base64String {{base64String}} </p>
+  <p> Base64String {{base64String}} </p> -->
   <!-- <WelcomeItem>
     <template #icon>
       <DocumentationIcon />

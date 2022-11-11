@@ -62,11 +62,11 @@ watch(searching, (newSearchingValue) => {
         <button class="btn" type="submit">Search</button>
     </form>
 
-  <section>
+  <!-- <section>
     <div>
       <p>{{ result }}</p>
     </div>
-  </section>
+  </section> -->
 
   <section>
     <div>
@@ -74,6 +74,8 @@ watch(searching, (newSearchingValue) => {
     </div>
   </section>
 
-  <PhotoAlbum :photos=photos />
+  <div class="container-fluid" style="margin-top:200px">
+    <PhotoAlbum :photos=photos />
+  </div>
 
 </template>
