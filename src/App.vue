@@ -14,12 +14,12 @@ import { RouterLink, RouterView } from 'vue-router'
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          
+
           <div class="collapse navbar-collapse" id="navbarNav">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
-              <a class="nav-link" href="/search">Search</a>
-              <a class="nav-link" href="/upload">Upload</a>
+              <router-link to="/" class="nav-item nav-link"> Home </router-link>
+              <router-link to="/search" class="nav-item nav-link"> Search </router-link>
+              <router-link to="/upload" class="nav-item nav-link"> Upload </router-link>
             </div>
           </div>
         </div>
