@@ -20,6 +20,9 @@ const { isListening, isSupported, stop, start, result } = useSpeechRecognition({
 
 async function searchForPhotos() {
   searching.value = true
+  if (isListening) {
+    stop()
+  }
 
   console.log(`Searching for ${result.value}...`)
   const photosRaw = await apiClient.searchPhotos(result.value)
