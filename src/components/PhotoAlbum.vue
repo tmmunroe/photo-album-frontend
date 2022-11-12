@@ -8,28 +8,30 @@ const props = defineProps<{
 </script>
 
 <template>
-    <div class="gallery">
-        <div class="gallery-panel"
-          v-for="photo in photos">
-          <Photo :src=photo />
-        </div>  
-    </div>
+  <ul class="album">
+    <li class="photo-box"
+      v-for="photo in photos">
+        <Photo :src=photo />
+    </li>
+    <li></li>  
+  </ul>
 </template>
 
 <style>
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  grid-gap: 1rem;
-  max-width: 80rem;
-  margin: 5rem auto;
-  padding: 0 5rem;
+
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
 }
 
-.gallery-panel img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  border-radius: 0.75rem;
+li {
+  height: 40vh;
+  flex-grow: 1;
+}
+
+li:last-child {
+  flex-grow: 10;
 }
 </style>

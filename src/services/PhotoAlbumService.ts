@@ -16,11 +16,12 @@ export class ApiClient {
     }
     
 
-    async uploadPhoto(base64String: string, contentType:string, customLabels: string[]) {
+    async uploadPhoto(base64String: string, contentType:string, customLabels: string[]): Promise<boolean> {
         console.log("uploading contentType: ", contentType)
         console.log("uploading custom labels: ", customLabels)
         console.log("uploading base64 image: ", base64String)
         
+        var uploadOkay = false
         const uuid = uuidv4()
         const body = base64String
         const headers = { 
@@ -32,9 +33,14 @@ export class ApiClient {
         try {
             const response = await this.apigClient.photosPut(headers, body, {})
             console.log('received response: ', response)
+            uploadOkay = response.status == '200'
+
         } catch(error: any) {
             console.log("an error occured: ", error)
+            uploadOkay = false
         }
+
+        return uploadOkay
     }
 
     

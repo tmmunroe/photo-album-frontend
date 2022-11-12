@@ -3,7 +3,5 @@ import HomePhotoAlbum from '../components/HomePhotoAlbum.vue'
 </script>
 
 <template>
-  <main>
-    <HomePhotoAlbum />
-  </main>
+  <HomePhotoAlbum />
 </template>

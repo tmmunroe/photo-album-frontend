@@ -2,14 +2,15 @@
 // import WelcomeItem from './WelcomeItem.vue'
 // import DocumentationIcon from './icons/IconDocumentation.vue'
 // import SupportIcon from './icons/IconSupport.vue'
-import { ref, reactive, type Ref, watch } from "vue"
+import { ref, type Ref, watch } from "vue"
 import { ApiClient } from '../services/PhotoAlbumService'
-import { useFileDialog, useBase64, useImage } from '@vueuse/core'
+import { useFileDialog} from '@vueuse/core'
 
 const apiClient = new ApiClient()
 const base64ImageMatcher = RegExp("^data:(image/[^;]*)[^,]*,")
 const customLabels = ref(Array<string>())
 const base64String: Ref<string | null> = ref(null)
+const uploadResultMsg: Ref<string | null> = ref(null)
 
 const { files, open, reset } = useFileDialog({multiple: false})
 
@@ -45,7 +46,7 @@ watch(files, (newFiles) => {
 
 
 // upload photo
-function uploadPhoto() {
+async function uploadPhoto() {
   if (typeof base64String.value != 'string') {
     console.log("base64String not set")
     return
@@ -60,20 +61,26 @@ function uploadPhoto() {
   const contentType = imageTypeMatches[1]
   var cleanedBase64String = base64String.value.replace(base64ImageMatcher, "")
 
-  apiClient.uploadPhoto(cleanedBase64String, contentType, customLabels.value)
+  const uploadCompleted = await apiClient.uploadPhoto(cleanedBase64String, contentType, customLabels.value)
+  uploadResultMsg.value = uploadCompleted ? "Picture uploaded successfully!" : "Could not upload picture!"
 }
 
+function reset_all() {
+  reset()
+  uploadResultMsg.value = null
+  customLabels.value = []
+}
 
 </script>
 
 
 <template>
-
+  <h3 v-if="uploadResultMsg"> {{ uploadResultMsg }} </h3>
 
   <button type="button" @click="open()">
     Choose files
   </button>
-  <button type="button" :disabled="!files" @click="reset()">
+  <button type="button" :disabled="!files" @click="reset_all()">
     Reset
   </button>
   <template v-if="files">
@@ -83,7 +90,6 @@ function uploadPhoto() {
     </div>
   </template>
 
-  
   <p>
       <textarea v-model="customLabels" placeholder="custom labels (e.g. cat,dog)" />
   </p>
@@ -92,30 +98,6 @@ function uploadPhoto() {
     <button @click="uploadPhoto" :disabled="base64String===null">Upload</button>
   </p>
 
-<!-- 
-  <p> Custom labels {{customLabels}} </p>
-  <p> Base64String {{base64String}} </p> -->
-  <!-- <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
-
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem> -->
 </template>
 
 <style>

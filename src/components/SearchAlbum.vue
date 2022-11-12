@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch, type Ref } from "vue"
-import { useSpeechRecognition, useVirtualList } from '@vueuse/core'
+import { ref, watch, type Ref } from "vue"
+import { useSpeechRecognition } from '@vueuse/core'
 import { ApiClient } from '../services/PhotoAlbumService'
 import PhotoAlbum from "./PhotoAlbum.vue"
 // Speech
@@ -49,33 +49,30 @@ watch(searching, (newSearchingValue) => {
 
 <template>
 
-  
-    <form @submit.prevent="searchForPhotos" class="d-flex justify-content-center fixed-top" style="margin-top: 100px;">
-        <button v-if="!isListening" class="btn" type="button" @click="start">
-          <i class="bi bi-mic"></i>
-          <img src="./icons/mic.svg" alt="Bootstrap" width="32" height="32"/>
-        </button>
-        <button v-if="isListening" class="btn" type="button" @click="stop">
-          <img src="./icons/mic-fill.svg" alt="Bootstrap" width="32" height="32"/>
-        </button>
-        <input class="form-control form-input" @keyup.enter="searchForPhotos" type="search" v-model="result" placeholder="Search" aria-label="Search">
-        <button class="btn" type="submit">Search</button>
-    </form>
+  <div class="vstack">
+    <div class="bg-white">
+      <form @submit.prevent="searchForPhotos" class="d-flex justify-content-center fixed-top" style="margin-top: 100px;">
+          <button v-if="!isListening" class="btn" type="button" @click="start">
+            <i class="bi bi-mic"></i>
+            <img src="./icons/mic.svg" alt="Bootstrap" width="32" height="32"/>
+          </button>
+          <button v-if="isListening" class="btn" type="button" @click="stop">
+            <img src="./icons/mic-fill.svg" alt="Bootstrap" width="32" height="32"/>
+          </button>
+          <input class="form-control form-input" @keyup.enter="searchForPhotos" type="search" v-model="result" placeholder="Search" aria-label="Search">
+          <button class="btn" type="submit">Search</button>
+      </form>
+  </div>
 
-  <!-- <section>
-    <div>
-      <p>{{ result }}</p>
+    <section>
+      <div>
+        <p>{{ queryResultMessage }}</p>
+      </div>
+    </section>
+
+    <div class="container-fluid mt-2">
+      <PhotoAlbum :photos=photos />
     </div>
-  </section> -->
-
-  <section>
-    <div>
-      <p>{{ queryResultMessage }}</p>
-    </div>
-  </section>
-
-  <div class="container-fluid" style="margin-top:200px">
-    <PhotoAlbum :photos=photos />
   </div>
 
 </template>
