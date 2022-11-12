@@ -77,18 +77,19 @@ function reset_all() {
 <template>
   <h3 v-if="uploadResultMsg"> {{ uploadResultMsg }} </h3>
 
+  <template v-if="files">
+    <div v-if="typeof base64String === 'string'">
+      <img :src=base64String class="img-fluid img-thumbnail">
+    </div>
+    <p>You have selected: <b>{{ files![0].name }} files</b></p>
+  </template>
+
   <button type="button" @click="open()">
     Choose files
   </button>
   <button type="button" :disabled="!files" @click="reset_all()">
     Reset
   </button>
-  <template v-if="files">
-    <p>You have selected: <b>{{ files![0].name }} files</b></p>
-    <div v-if="typeof base64String === 'string'">
-      <img :src=base64String class="img-fluid img-thumbnail">
-    </div>
-  </template>
 
   <p>
       <textarea v-model="customLabels" placeholder="custom labels (e.g. cat,dog)" />
@@ -101,8 +102,8 @@ function reset_all() {
 </template>
 
 <style>
-.thumbnail {
-  max-width: 20%;
-  height: auto;
+.img-thumbnail {
+  max-height: 150px;
+  width: auto;
 }
 </style>

@@ -23,12 +23,13 @@ async function searchForPhotos() {
 
   console.log(`Searching for ${result.value}...`)
   const photosRaw = await apiClient.searchPhotos(result.value)
-  const photosBase64 = photosRaw.map((s) => { return base64Prefix.concat(s) })
-  for (var i = 0; i < 100; i++ ){
-    photosBase64.forEach((el) => {
-      photos.value.push(el)
-    })
-  }
+  photos.value = photosRaw.map((s) => { return base64Prefix.concat(s) })
+  // test many images
+  // for (var i = 0; i < 100; i++ ){
+  //   photosBase64.forEach((el) => {
+  //     photos.value.push(el)
+  //   })
+  // }
   console.log(`Received ${photos.value.length} photos!`)
 
   searching.value = false
