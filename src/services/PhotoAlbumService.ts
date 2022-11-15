@@ -7,9 +7,9 @@ export class ApiClient {
     apigClient: any
     constructor() {
         this.apigClient = apigClientFactory.newClient(
-            'https://1dhzm5osvb.execute-api.us-east-1.amazonaws.com/testStage',
+            'https://do5vxod3b2.execute-api.us-east-1.amazonaws.com/testStage',
             {
-                'apiKey': 'iYehTmwxHt8eQpIU12toq2xpr08iJMBe1czuJcpy'
+                'apiKey': '6O0a2SdWkb8r64zyVqztB9Ngpoq6i9Vk7YB9KQV2'
             }
             );
     }
