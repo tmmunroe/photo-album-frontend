@@ -17,7 +17,7 @@ import { apiGatewayClientFactory } from "./lib/apiGatewayCore/apiGatewayClient.j
 import { utils } from "./lib/apiGatewayCore/utils.js"
 
 export var apigClientFactory = {};
-apigClientFactory.newClient = function (config) {
+apigClientFactory.newClient = function (invokeUrl, config) {
     var apigClient = { };
     if(config === undefined) {
         config = {
@@ -56,7 +56,7 @@ apigClientFactory.newClient = function (config) {
 
     
     // extract endpoint and path from url
-    var invokeUrl = 'https://rke9q29hs6.execute-api.us-east-1.amazonaws.com/testStage';
+    // var invokeUrl = 'https://rke9q29hs6.execute-api.us-east-1.amazonaws.com/testStage';
     var endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
     var pathComponent = invokeUrl.substring(endpoint.length);
 
