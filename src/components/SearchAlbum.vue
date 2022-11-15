@@ -72,6 +72,7 @@ watch(searching, (newSearchingValue) => {
       <div>
         <p>{{ queryResultMessage }}</p>
       </div>
+      <h5> Example change </h5>
     </section>
 
     <div class="container-fluid mt-2">
